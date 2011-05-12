@@ -70,6 +70,8 @@ int main(int argc, char **argv) {
     func = algo_lookup(algo);
     if (func)
         func(argc, argv);
+    else
+        usage(argv[0]);
 
     return 0;
 }
