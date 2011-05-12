@@ -24,7 +24,7 @@ static int resize_buffer(char **buf, int size) {
     return 0;
 }
 
-int do_strrev(int argc, char **argv) {
+static char *read_string(int argc, char **argv) {
     int i, n, bytes, size;
     char *buf;
 
@@ -72,9 +72,22 @@ int do_strrev(int argc, char **argv) {
         buf[i] = '\0';
     }
 
+    return buf;
+}
+
+int do_strrev(int argc, char **argv) {
+    char *buf = read_string(argc, argv);
     reverse(buf, 0, strlen(buf));
     printf("%s\n", buf);
     free(buf);
+    return 0;
+}
+
+int do_wordrev(int argc, char **argv) {
+    char *buf = read_string(argc, argv);
+    reverse(buf, 0, strlen(buf));
+    wordrev(buf);
+    printf("%s\n", buf);
     return 0;
 }
 
@@ -90,7 +103,7 @@ static void reverse(char *s, int start, int end) {
 }
 
 static void wordrev(char *s) {
-    int i, j, tmp;
+    int i, j;
     for (i = 0; i < strlen(s); ++i) {
         j = i;
         while (s[i] != '\0' && s[i] != ' ')
@@ -99,18 +112,9 @@ static void wordrev(char *s) {
     }
 }
 
-/*
-int main(int argc, char **argv) {
-    int i;
-    char s[] = "hello world foo bar baz";
-    printf("normal: %s\n", s);
-
-    reverse(s, 0, strlen(s));
-    printf("reversed string: %s\n", s);
-
-    wordrev(s);
-    printf("reversed words: %s\n", s);
-
-    return 0;
+void strrev_usage(const char *prog) {
+    fprintf(stderr, "Usage: %s strrev [<string>]\n" \
+            "Reverses a string optionally passed as an argument or read from stdin.\n\n" \
+            "    Example: $ echo hello world | %s strrev\n" \
+            "    dlrow olleh\n\n", prog, prog);
 }
-*/

@@ -16,7 +16,6 @@
 
 static double power(int a, unsigned int n);
 static int power2(int a, unsigned int n);
-static void power_usage(const char *prog);
 
 int do_power(int argc, char **argv) {
     int a, n;
@@ -79,8 +78,11 @@ static int power2(int a, unsigned int n) {
     return res;
 }
 
-static void power_usage(const char *prog) {
-    fprintf(stderr, "Usage: %s a n\n" \
+void power_usage(const char *prog) {
+    fprintf(stderr, "Usage: %s power [a n]\n" \
+            "power function will read from stdin if no integer args are given.\n\n" \
+            "    Example: $ echo 2 3 | %s power\n" \
+            "    8\n\n" \
             "Computes a^n where `a` is an integer" \
-            " and `n` is a positive integer exponent.\n", prog);
+            " and `n` is a positive integer exponent.\n", prog, prog);
 }
