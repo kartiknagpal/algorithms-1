@@ -114,7 +114,14 @@ static void wordrev(char *s) {
 
 void strrev_usage(const char *prog) {
     fprintf(stderr, "Usage: %s strrev [<string>]\n" \
-            "Reverses a string optionally passed as an argument or read from stdin.\n\n" \
+            "Reverses a string's characters passed as an argument or read from stdin.\n\n" \
             "    Example: $ echo hello world | %s strrev\n" \
             "    dlrow olleh\n\n", prog, prog);
+}
+
+void wordrev_usage(const char *prog) {
+    fprintf(stderr, "Usage: %s wordrev [<string>]\n" \
+            "Reverses a string's words passed as an argument or read from stdin.\n\n" \
+            "    Example: $ echo hello world | %s wordrev\n" \
+            "    world hello\n\n", prog, prog);
 }

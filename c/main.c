@@ -41,7 +41,7 @@ static struct algo_s algorithms[] = {
     {"help", do_help, NULL},
     {"power", do_power, power_usage},
     {"strrev", do_strrev, strrev_usage},
-    {"wordrev", do_wordrev, NULL}
+    {"wordrev", do_wordrev, wordrev_usage}
 };
 
 static void usage(const char *prog) {
