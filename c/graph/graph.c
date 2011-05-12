@@ -14,8 +14,6 @@
 #define N 8
 #define DAG_N 9
 
-static struct queue_s *Q;
-
 static struct queue_s *create_queue(int n) {
     struct queue_s *q;
     q = (struct queue_s *)malloc(sizeof(struct queue_s));
@@ -177,6 +175,7 @@ static void BFS(struct graph_s *graph, struct vertex_s *s) {
     int i;
     struct listnode_s *adj;
     struct vertex_s *u, *v;
+    struct queue_s *Q;
 
     Q = create_queue(graph->num_vertices);
 
