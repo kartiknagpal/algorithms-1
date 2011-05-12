@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "powers_of/power.h"
+#include "array_manipulation/strrev.h"
 
 #define HASH_SIZE 32
 
@@ -17,7 +18,8 @@ static long hashString(const char *name);
 static void init_hash_table(void);
 
 static struct algo_s algorithms[] = {
-    {"power", do_power}
+    {"power", do_power},
+    {"strrev", do_strrev}
 };
 
 static void usage(const char *prog) {

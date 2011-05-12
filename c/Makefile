@@ -1,5 +1,5 @@
 CC = gcc
-OBJECTS = main.o powers_of/power.o
+OBJECTS = main.o powers_of/power.o array_manipulation/strrev.o
 TARGETS = algorithms
 
 all: $(TARGETS)
