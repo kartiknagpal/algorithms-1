@@ -24,9 +24,11 @@ int do_power(int argc, char **argv) {
     /* requires two integer args, either from command line or stdin */
 
     if (argc >= 4) {
+        /* read from command line */
         a = atoi(argv[2]);
         n = atoi(argv[3]);
     } else {
+        /* read from stdin */
         int c, i = 0;
         int args[2];
 

@@ -11,7 +11,18 @@
 static void reverse(char *s, int start, int end);
 static void wordrev(char *s);
 
-#define MAX_BUF 1024
+#define MAX_BUF 4
+
+static int resize_buffer(char **buf, int size) {
+    char *newbuf = realloc(*buf, size);
+    if (!newbuf) {
+        fprintf(stderr, "Can't realloc buffer\n");
+        return -1;
+    }
+
+    *buf = newbuf;
+    return 0;
+}
 
 int do_strrev(int argc, char **argv) {
     int i, n, bytes, size;
@@ -20,19 +31,18 @@ int do_strrev(int argc, char **argv) {
     size = MAX_BUF;
     buf = malloc(size);
 
+    /* 2 args for progname and algorithm to run (./algorithms strrev <string>),
+     * rest of args are used as the string to reverse. */
     if (argc >= 3) {
+        /* read from command line */
         for (i = 2, bytes = 0; argv[i]; ++i) {
             n = snprintf(buf+bytes, size-bytes, "%s ", argv[i]);
             if (n >= size-bytes) {
-                char *newbuf = realloc(buf, size*2);
-
-                if (!newbuf) {
-                    fprintf(stderr, "Can't realloc buffer\n");
+                if (resize_buffer(&buf, size*2) == -1) {
                     free(buf);
                     return -1;
                 }
 
-                buf = newbuf;
                 size *= 2;
                 /* retry the copy */
                 n = snprintf(buf+bytes, size-bytes, "%s ", argv[i]);
@@ -42,6 +52,24 @@ int do_strrev(int argc, char **argv) {
 
         /* strip off trailing ' ' */
         buf[bytes-1] = '\0';
+    } else {
+        /* read from stdin */
+        int c, i;
+        i = 0;
+        while ((c = getc(stdin))) {
+            if (c == EOF || c == '\n')
+                break;
+            if (i >= size) {
+                if (resize_buffer(&buf, size*2) == -1) {
+                    free(buf);
+                    return -1;
+                }
+
+                size *= 2;
+            }
+            buf[i++] = c;
+        }
+        buf[i] = '\0';
     }
 
     reverse(buf, 0, strlen(buf));
