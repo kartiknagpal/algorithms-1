@@ -1,6 +1,30 @@
 I'm adding this to Github because maybe people want to add their own implementations
 of these algorithms and data structures. It can also provide a useful reference.
 
+I'm currently working on an executable binary that runs these algorithms from the
+command line. If you navigate to the c/ directory, you can build the binary with make.
+If it was built without errors, you can check out the help info:
+
+    $ ./algorithms help
+
+to see what algorithms are currently available. To get more info on a specific algorithm:
+
+    $ ./algorithms help <algo>
+
+Each algorithm can either read from the command line (argv) or from stdin. This means
+you can pipe data into the algorithms or just run them standalone.
+
+Example for running the string reverse algorithm from the command line:
+
+    $ ./algorithms strrev hello world
+    dlrow olleh
+
+And from stdin:
+
+    $ echo hello world | ./algorithms strrev
+    dlrow olleh
+
+
 Algorithms
 -----------------------------
 
