@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "power.h"
 
@@ -16,7 +17,6 @@
 static double power(int a, unsigned int n);
 static int power2(int a, unsigned int n);
 static void power_usage(const char *prog);
-static void parse_args(char **argv, int *a, int *n);
 
 int do_power(int argc, char **argv) {
     int a, n;
