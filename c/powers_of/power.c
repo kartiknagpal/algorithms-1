@@ -20,14 +20,31 @@ static void power_usage(const char *prog);
 
 int do_power(int argc, char **argv) {
     int a, n;
-    /* requires two integer args */
-    if (argc < 4) {
-        power_usage(argv[0]);
-        return -1;
-    }
 
-    a = atoi(argv[2]);
-    n = atoi(argv[3]);
+    /* requires two integer args, either from command line or stdin */
+
+    if (argc >= 4) {
+        a = atoi(argv[2]);
+        n = atoi(argv[3]);
+    } else {
+        int c, i = 0;
+        int args[2];
+
+        while ((c = getc(stdin))) {
+            if (i > 1)
+                break;
+
+            while (c != EOF && c == ' ')
+                c = getc(stdin);
+            if (c == EOF)
+                break;
+
+            args[i++] = c-'0';
+        }
+
+        a = args[0];
+        n = args[1];
+    }
 
     if (a == 0) {
         printf("0\n");
