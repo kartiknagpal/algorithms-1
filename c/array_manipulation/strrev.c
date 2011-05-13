@@ -11,7 +11,7 @@
 static void reverse(char *s, int start, int end);
 static void wordrev(char *s);
 
-#define MAX_BUF 4
+#define MAX_BUF 1024
 
 static int resize_buffer(char **buf, int size) {
     char *newbuf = realloc(*buf, size);
