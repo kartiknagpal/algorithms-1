@@ -102,15 +102,18 @@ static void (*algo_help_lookup(const char *name))(const char *) {
 
 static void init_hash_table(void) {
     int i, len;
+    long hash;
+
     len = sizeof(algorithms) / sizeof(struct algo_s);
 
     for (i = 0; i < len; ++i) {
-        if (algo_hash_table[hashString(algorithms[i].name)])
+        hash = hashString(algorithms[i].name);
+        if (algo_hash_table[hash]) {
             fprintf(stderr, "hash table collision on key %s (%ld)\n",
-                    algorithms[i].name, hashString(algorithms[i].name));
-        else {
-            algo_hash_table[hashString(algorithms[i].name)] = algorithms[i].cmd;
-            algo_help_table[hashString(algorithms[i].name)] = algorithms[i].help_cmd;
+                    algorithms[i].name, hash);
+        } else {
+            algo_hash_table[hash] = algorithms[i].cmd;
+            algo_help_table[hash] = algorithms[i].help_cmd;
         }
     }
 }
