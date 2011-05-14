@@ -7,22 +7,10 @@
 #include <string.h>
 
 #include "strrev.h"
+#include "../shared.h"
 
 static void reverse(char *s, int start, int end);
 static void wordrev(char *s);
-
-#define MAX_BUF 1024
-
-static int resize_buffer(char **buf, int size) {
-    char *newbuf = realloc(*buf, size);
-    if (!newbuf) {
-        fprintf(stderr, "Can't realloc buffer\n");
-        return -1;
-    }
-
-    *buf = newbuf;
-    return 0;
-}
 
 static char *read_string(int argc, char **argv) {
     int i, n, bytes, size;
@@ -38,9 +26,9 @@ static char *read_string(int argc, char **argv) {
         for (i = 2, bytes = 0; argv[i]; ++i) {
             n = snprintf(buf+bytes, size-bytes, "%s ", argv[i]);
             if (n >= size-bytes) {
-                if (resize_buffer(&buf, size*2) == -1) {
+                if (resize_char_buffer(&buf, size*2) == -1) {
                     free(buf);
-                    return -1;
+                    return NULL;
                 }
 
                 size *= 2;
@@ -60,9 +48,9 @@ static char *read_string(int argc, char **argv) {
             if (c == EOF || c == '\n')
                 break;
             if (i >= size) {
-                if (resize_buffer(&buf, size*2) == -1) {
+                if (resize_char_buffer(&buf, size*2) == -1) {
                     free(buf);
-                    return -1;
+                    return NULL;
                 }
 
                 size *= 2;
