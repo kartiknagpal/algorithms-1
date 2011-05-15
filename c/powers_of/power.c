@@ -28,25 +28,33 @@ int do_power(int argc, char **argv) {
         n = atoi(argv[3]);
     } else {
         /* read from stdin */
-        int c;
+        int c, i = 0;
         int args[2] = {0, 0};
 
-        while ((c = getc(stdin))) {
-            if (c == ' ' || c == EOF)
+        /* remove leading spaces */
+        while ((c = getc(stdin)))
+            if (c != ' ')
                 break;
 
-            args[0] *= 10;
-            args[0] += c-'0';
-        }
+        if (c == EOF || c == '\n')
+            return -1;
+
+        ungetc(c, stdin);
 
         while ((c = getc(stdin))) {
+            if (i > 1)
+                break;
+
+            if (c == ' ')
+                ++i;
+
             while (c != EOF && c == ' ')
                 c = getc(stdin);
             if (c == EOF || c == '\n')
                 break;
 
-            args[1] *= 10;
-            args[1] += c-'0';
+            args[i] *= 10;
+            args[i] += c-'0';
         }
 
         a = args[0];

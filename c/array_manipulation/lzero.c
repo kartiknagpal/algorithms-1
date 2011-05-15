@@ -25,9 +25,18 @@ int do_lzero(int argc, char **argv) {
         list = malloc(sizeof(int)*size);
         n = 0;
 
+        /* remove leading spaces */
+        while ((c = getc(stdin)))
+            if (c != ' ')
+                break;
+
+        if (c == EOF || c == '\n')
+            return -1;
+
+        ungetc(c, stdin);
+
         while ((c = getc(stdin))) {
             if (c == ' ') {
-                printf("increasing n\n");
                 ++n;
                 if (n >= size) {
                     int *newlist = realloc(list, size*2);
@@ -40,6 +49,7 @@ int do_lzero(int argc, char **argv) {
                 }
             }
 
+            /* move to next number */
             while (c != EOF && c == ' ')
                 c = getc(stdin);
             if (c == EOF || c == '\n')
@@ -66,6 +76,8 @@ int do_lzero(int argc, char **argv) {
         if (i < n-1)
             printf(", ");
     }
+
+    free(list);
 
     printf("\n");
     return 0;
