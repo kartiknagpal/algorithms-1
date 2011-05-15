@@ -4,28 +4,75 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 
-int main(int argc, char **argv) {
-    int i, cur, tmp;
-    int a[10] = {1, 2, 0, 3, 0, 5, 6, 0, 10, 0};
+#include "lzero.h"
 
-    cur = 0; /* index where a 0 should be placed */
-    for (i = 0; i < 10; ++i) {
-        if (a[i] == 0) {
-            tmp = a[cur];
-            a[cur] = a[i];
-            a[i] = tmp;
+int do_lzero(int argc, char **argv) {
+    int i, n, cur, tmp;
+    int *list;
+
+
+    if (argc > 2) {
+        /* get number of args remaining */
+        n = argc - 2;
+        list = malloc(sizeof(int)*n);
+        for (i = 0; i < n; ++i) {
+            list[i] = atoi(argv[i+2]);
+        }
+    } else {
+        int c, size = 32;
+        list = malloc(sizeof(int)*size);
+        n = 0;
+
+        while ((c = getc(stdin))) {
+            if (c == ' ') {
+                printf("increasing n\n");
+                ++n;
+                if (n >= size) {
+                    int *newlist = realloc(list, size*2);
+                    if (!newlist) {
+                        free(list);
+                        return -1;
+                    }
+
+                    size *= 2;
+                }
+            }
+
+            while (c != EOF && c == ' ')
+                c = getc(stdin);
+            if (c == EOF || c == '\n')
+                break;
+
+            list[n] *= 10;
+            list[n] += c-'0';
+        }
+        ++n;
+    }
+
+    cur = 0;
+    for (i = 0; i < n; ++i) {
+        if (list[i] == 0) {
+            tmp = list[cur];
+            list[cur] = list[i];
+            list[i] = tmp;
             ++cur;
         }
     }
 
-    for (i = 0; i < 10; ++i) {
-        printf("%d", a[i]);
-        if (i < 9)
+    for (i = 0; i < n; ++i) {
+        printf("%d", list[i]);
+        if (i < n-1)
             printf(", ");
     }
 
     printf("\n");
-
     return 0;
+}
+
+void lzero_usage(const char *prog) {
+    fprintf(stderr, "Usage: %s lzero [<list of integers>]\n" \
+            "Partitions an array such that zeroes are shifted to the left of the array.\n\n" \
+            "    Example: $ echo 2 3 0 4 0 7 8 0 | %s lzero\n", prog, prog);
 }

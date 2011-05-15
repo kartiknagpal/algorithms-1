@@ -5,6 +5,7 @@
 
 #include "powers_of/power.h"
 #include "array_manipulation/strrev.h"
+#include "array_manipulation/lzero.h"
 #include "shared.h"
 
 #define HASH_SIZE 32
@@ -28,7 +29,8 @@ static struct algo_s algorithms[] = {
     {"help", do_help, usage},
     {"power", do_power, power_usage},
     {"strrev", do_strrev, strrev_usage},
-    {"wordrev", do_wordrev, wordrev_usage}
+    {"wordrev", do_wordrev, wordrev_usage},
+    {"lzero", do_lzero, lzero_usage}
 };
 
 static char *algo_names(void) {
