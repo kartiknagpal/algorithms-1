@@ -74,7 +74,7 @@ int do_lzero(int argc, char **argv) {
     for (i = 0; i < n; ++i) {
         printf("%d", list[i]);
         if (i < n-1)
-            printf(", ");
+            printf(" ");
     }
 
     free(list);
@@ -86,5 +86,6 @@ int do_lzero(int argc, char **argv) {
 void lzero_usage(const char *prog) {
     fprintf(stderr, "Usage: %s lzero [<list of integers>]\n" \
             "Partitions an array such that zeroes are shifted to the left of the array.\n\n" \
-            "    Example: $ echo 2 3 0 4 0 7 8 0 | %s lzero\n", prog, prog);
+            "    Example: $ echo 2 3 0 4 0 7 8 0 | %s lzero\n" \
+            "    0 0 0 4 3 7 8 2\n", prog, prog);
 }
