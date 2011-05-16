@@ -31,7 +31,7 @@ int do_intrev(int argc, char **argv) {
         }
     }
 
-    if (n <= 0) {
+    if (n == 0) {
         intrev_usage(argv[0]);
         return -1;
     }
