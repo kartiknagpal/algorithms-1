@@ -17,7 +17,7 @@ int resize_char_buffer(char **buf, int size) {
 int skipc(FILE *fp, const char k) {
     /*
      * Skips chars defined by `k` (generally spaces).
-     * Puts the current `k` char back into the stream.
+     * Puts the current char back into the stream.
      */
     int c;
 
