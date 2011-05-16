@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 #include "lzero.h"
+#include "../shared.h"
 
 int do_lzero(int argc, char **argv) {
     int i, n, cur, tmp;
@@ -25,17 +26,16 @@ int do_lzero(int argc, char **argv) {
         list = malloc(sizeof(int)*size);
         n = 0;
 
-        /* remove leading spaces */
-        while ((c = getc(stdin)))
-            if (c != ' ')
+        /* strip leading spaces */
+        skipc(stdin, ' ');
+
+        /* XXX: Known "feature": `n` after the loop is incremented no matter what.
+         *      This means an input of '\n' outputs '0' */
+
+        while ((c = getc(stdin)) != EOF) {
+            if (c == '\n')
                 break;
 
-        if (c == EOF || c == '\n')
-            return -1;
-
-        ungetc(c, stdin);
-
-        while ((c = getc(stdin))) {
             if (c == ' ') {
                 ++n;
                 if (n >= size) {
@@ -47,13 +47,9 @@ int do_lzero(int argc, char **argv) {
 
                     size *= 2;
                 }
-            }
-
-            /* move to next number */
-            while (c != EOF && c == ' ')
+                skipc(stdin, ' ');
                 c = getc(stdin);
-            if (c == EOF || c == '\n')
-                break;
+            }
 
             list[n] *= 10;
             list[n] += c-'0';

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "power.h"
+#include "../shared.h"
 
 /*
  * Compute a^n for positive integer exponents. Exploit the relationship
@@ -31,27 +32,20 @@ int do_power(int argc, char **argv) {
         int c, i = 0;
         int args[2] = {0, 0};
 
-        /* remove leading spaces */
-        while ((c = getc(stdin)))
-            if (c != ' ')
+        /* strip leading spaces */
+        skipc(stdin, ' ');
+
+        while ((c = getc(stdin)) != EOF) {
+            if (c == '\n')
                 break;
-
-        if (c == EOF || c == '\n')
-            return -1;
-
-        ungetc(c, stdin);
-
-        while ((c = getc(stdin))) {
             if (i > 1)
                 break;
 
-            if (c == ' ')
+            if (c == ' ') {
                 ++i;
-
-            while (c != EOF && c == ' ')
+                skipc(stdin, ' ');
                 c = getc(stdin);
-            if (c == EOF || c == '\n')
-                break;
+            }
 
             args[i] *= 10;
             args[i] += c-'0';
