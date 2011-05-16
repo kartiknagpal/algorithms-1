@@ -12,13 +12,12 @@
 static int intreverse(int n);
 
 int do_intrev(int argc, char **argv) {
-    int n;
+    int n = 0;
 
     if (argc > 2) {
         n = atoi(argv[2]);
     } else {
         int c;
-        n = 0;
         skipc(stdin, ' ');
 
         while ((c = getc(stdin)) != EOF) {
@@ -32,7 +31,7 @@ int do_intrev(int argc, char **argv) {
         }
     }
 
-    if (n < 0) {
+    if (n <= 0) {
         intrev_usage(argv[0]);
         return -1;
     }
