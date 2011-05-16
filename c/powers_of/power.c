@@ -47,8 +47,10 @@ int do_power(int argc, char **argv) {
                 c = getc(stdin);
             }
 
-            args[i] *= 10;
-            args[i] += c-'0';
+            if (c >= '0' && c <= '9') {
+                args[i] *= 10;
+                args[i] += c-'0';
+            }
         }
 
         a = args[0];

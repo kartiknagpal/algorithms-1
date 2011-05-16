@@ -51,8 +51,10 @@ int do_lzero(int argc, char **argv) {
                 c = getc(stdin);
             }
 
-            list[n] *= 10;
-            list[n] += c-'0';
+            if (c >= '0' && c <= '9') {
+                list[n] *= 10;
+                list[n] += c-'0';
+            }
         }
         ++n;
     }

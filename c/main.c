@@ -5,6 +5,7 @@
 
 #include "powers_of/power.h"
 #include "array_manipulation/strrev.h"
+#include "array_manipulation/intrev.h"
 #include "array_manipulation/lzero.h"
 #include "shared.h"
 
@@ -28,6 +29,7 @@ static void init_hash_table(void);
 static struct algo_s algorithms[] = {
     {"help", do_help, usage},
     {"power", do_power, power_usage},
+    {"intrev", do_intrev, intrev_usage},
     {"strrev", do_strrev, strrev_usage},
     {"wordrev", do_wordrev, wordrev_usage},
     {"lzero", do_lzero, lzero_usage}
