@@ -9,10 +9,10 @@
 #include "../shared.h"
 #include "intrev.h"
 
-static int intreverse(int n);
+static unsigned long intreverse(unsigned long n);
 
 int do_intrev(int argc, char **argv) {
-    int n = 0;
+    unsigned long n = 0;
 
     if (argc > 2) {
         n = atoi(argv[2]);
@@ -36,12 +36,12 @@ int do_intrev(int argc, char **argv) {
         return -1;
     }
 
-    printf("%d\n", intreverse(n));
+    printf("%ld\n", intreverse(n));
     return 0;
 }
 
-static int intreverse(int n) {
-    int r = 0;
+static unsigned long intreverse(unsigned long n) {
+    unsigned long r = 0;
     while (n) {
         r *= 10;
         r += n % 10;
