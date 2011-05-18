@@ -62,8 +62,11 @@ static void rb_insert_fixup(struct rb_node_s **T, struct rb_node_s *z) {
     struct rb_node_s *y;
 
     while (z->p->color == RED) {
+        /* is z's grandparent's left child z's parent? */
         if (z->p == z->p->p->left) {
+            /* z's right uncle */
             y = z->p->p->right;
+
             if (y->color == RED) {
                 z->p->color = BLACK;
                 y->color = BLACK;
@@ -71,6 +74,7 @@ static void rb_insert_fixup(struct rb_node_s **T, struct rb_node_s *z) {
                 z = z->p->p;
             } else {
                 if (z == z->p->right) {
+                    /* z is its parent's right child */
                     z = z->p;
                     rb_left_rotate(T, z);
                 }
@@ -80,6 +84,7 @@ static void rb_insert_fixup(struct rb_node_s **T, struct rb_node_s *z) {
                 rb_right_rotate(T, z->p->p);
             }
         } else {
+            /* z's left uncle */
             y = z->p->p->left;
             if (y->color == RED) {
                 z->p->color = BLACK;
@@ -88,6 +93,7 @@ static void rb_insert_fixup(struct rb_node_s **T, struct rb_node_s *z) {
                 z = z->p->p;
             } else {
                 if (z == z->p->left) {
+                    /* z is its parent's left child */
                     z = z->p;
                     rb_right_rotate(T, z);
                 }
@@ -99,6 +105,7 @@ static void rb_insert_fixup(struct rb_node_s **T, struct rb_node_s *z) {
         }
     }
 
+    /* the root is always black */
     (*T)->color = BLACK;
 }
 
