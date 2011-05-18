@@ -141,6 +141,14 @@ static void rb_inorder(struct rb_node_s *p) {
     }
 }
 
+static void rb_destroy(struct rb_node_s *p) {
+    if (p != nil) {
+        rb_destroy(p->left);
+        rb_destroy(p->right);
+        free(p);
+    }
+}
+
 static struct rb_node_s *rb_new_node(int key) {
     struct rb_node_s *n;
     n = malloc(sizeof(struct rb_node_s));
@@ -158,7 +166,6 @@ int main(int argc, char **argv) {
     nil->color = BLACK;
     nil->p = nil->left = nil->right = nil;
 
-    root = malloc(sizeof(struct rb_node_s));
     root = nil;
 
     rb_insert(&root, rb_new_node(1));
@@ -173,6 +180,9 @@ int main(int argc, char **argv) {
     rb_inorder(root);
 
     printf("\nroot = %d\n", root->key);
+
+    rb_destroy(root);
+    free(nil);
 
     return 0;
 }
