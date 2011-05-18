@@ -136,14 +136,26 @@ static void rb_insert(struct rb_node_s **T, struct rb_node_s *z) {
     rb_insert_fixup(T, z);
 }
 
+static void print_node(struct rb_node_s *p) {
+    printf("  %d", p->key);
+    if (p->color == RED)
+        printf(" (red)\n");
+    else
+        printf(" (black)\n");
+}
+
+static void rb_preorder(struct rb_node_s *p) {
+    if (p != nil) {
+        print_node(p);
+        rb_preorder(p->left);
+        rb_preorder(p->right);
+    }
+}
+
 static void rb_inorder(struct rb_node_s *p) {
     if (p != nil) {
         rb_inorder(p->left);
-        printf("  %d", p->key);
-        if (p->color == RED)
-            printf(" (red)\n");
-        else
-            printf(" (black)\n");
+        print_node(p);
         rb_inorder(p->right);
     }
 }
@@ -184,7 +196,8 @@ int main(int argc, char **argv) {
     rb_insert(&root, rb_new_node(11));
     rb_insert(&root, rb_new_node(14));
     rb_insert(&root, rb_new_node(15));
-    rb_inorder(root);
+
+    rb_preorder(root);
 
     printf("\nroot = %d\n", root->key);
 
