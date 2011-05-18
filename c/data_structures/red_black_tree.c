@@ -94,10 +94,12 @@ static void rb_insert_fixup(struct rb_node_s **T, struct rb_node_s *z) {
 
                 z->p->color = BLACK;
                 z->p->p->color = RED;
-                rb_left_rotate(T, z);
+                rb_left_rotate(T, z->p->p);
             }
         }
     }
+
+    (*T)->color = BLACK;
 }
 
 static void rb_insert(struct rb_node_s **T, struct rb_node_s *z) {
@@ -130,7 +132,11 @@ static void rb_insert(struct rb_node_s **T, struct rb_node_s *z) {
 static void rb_inorder(struct rb_node_s *p) {
     if (p != nil) {
         rb_inorder(p->left);
-        printf("  %d\n", p->key);
+        printf("  %d", p->key);
+        if (p->color == RED)
+            printf(" (red)\n");
+        else
+            printf(" (black)\n");
         rb_inorder(p->right);
     }
 }
@@ -150,22 +156,23 @@ int main(int argc, char **argv) {
 
     nil = malloc(sizeof(struct rb_node_s));
     nil->color = BLACK;
-    nil->p = nil;
-    nil->left = nil->right = nil;
+    nil->p = nil->left = nil->right = nil;
 
     root = malloc(sizeof(struct rb_node_s));
     root = nil;
 
-    rb_insert(&root, rb_new_node(11));
-    rb_insert(&root, rb_new_node(2));
     rb_insert(&root, rb_new_node(1));
-    rb_insert(&root, rb_new_node(14));
-    rb_insert(&root, rb_new_node(15));
+    rb_insert(&root, rb_new_node(2));
+    rb_insert(&root, rb_new_node(4));
+    rb_insert(&root, rb_new_node(5));
     rb_insert(&root, rb_new_node(7));
     rb_insert(&root, rb_new_node(8));
-    rb_insert(&root, rb_new_node(5));
-    rb_insert(&root, rb_new_node(4));
+    rb_insert(&root, rb_new_node(11));
+    rb_insert(&root, rb_new_node(14));
+    rb_insert(&root, rb_new_node(15));
     rb_inorder(root);
+
+    printf("\nroot = %d\n", root->key);
 
     return 0;
 }
