@@ -178,6 +178,66 @@ static struct rb_node_s *rb_new_node(int key) {
     return n;
 }
 
+static rb_node_s *rb_min(struct rb_node_s *x) {
+    while (x->left)
+        x = x->left;
+    return x;
+}
+
+static struct rb_node_s *rb_successor(struct rb_node_s *x) {
+    /*
+     * The successor of node x is the node with the smallest key larger than
+     * x->key. The BST property lets us determine a successor without key comparisons.
+     */
+    struct rb_node_s *t;
+
+    if (x->right) {
+        /* all values in this branch are larger than x, so find the min of it */
+        return rb_min(x->right);
+    }
+
+    t = x->p;
+    while (t && x == t->right) {
+        x = t;
+        t = t->p;
+    }
+
+    return t;
+}
+
+static rb_node_s *rb_delete(struct rb_node_s **T, struct rb_node_s *z) {
+    struct rb_node_s *x, *y;
+
+    if (z->left == nil || z->right == nil)
+        y = z;
+    else
+        y = rb_successor(z);
+
+    if (y->left != nil)
+        x = y->left;
+    else
+        x = y->right;
+
+    x->p = y->p;
+
+    if (y->p == nil)
+        *T = x;
+    else if (y == y->parent->left)
+        y->p->left = x;
+    else
+        y->p->right = x;
+
+    if (y != z) {
+        z->key = y->key;
+        z->color = y->color;
+    }
+
+    if (y->color == BLACK)
+        rb_delete_fixup(T, x);
+
+    return y;
+}
+
 int main(int argc, char **argv) {
     struct rb_node_s *root;
 
