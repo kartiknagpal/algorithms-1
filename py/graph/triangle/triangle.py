@@ -35,11 +35,9 @@ class TriangleGraph(object):
         self.lines = triangle_lines
 
         self.graph = []
-        self.numNodes = 1
+        self.numNodes = 0
 
-        # initialize self.values with root value
-        self.values = [int(self.lines[0])]
-
+        self.values = []
         self.distances = []
         self.predecessors = []
 
@@ -49,6 +47,14 @@ class TriangleGraph(object):
         """
         Generates the adjacency lists from the data.
         """
+        # account for root node first because we need to track the other
+        # node's indexes as they're added to the graph.
+        self.numNodes = 1
+
+        # add root node to values first because the loop below only
+        # adds next lines.
+        self.values.append(int(self.lines[0]))
+
         for i in xrange(len(self.lines)-1):
             nextline = self.lines[i+1].split()
 
@@ -57,15 +63,30 @@ class TriangleGraph(object):
             self.values.extend([int(n) for n in nextline])
 
             for j in xrange(len(nextline[:-1])):
+                # add adjacent numbers on the next line to the graph
+                # for the current vertex.
                 self.graph.append({self.numNodes: int(nextline[j]),
                                    self.numNodes+1: int(nextline[j+1])})
+
+                # last adjacent vertex added to current vertex's adjacency
+                # list will be the _first_ vertex added to the next vertex's
+                # adjacency list, so increment numNodes by only 1.
                 self.numNodes += 1
 
+            # A new line is about to be added to the graph, so make sure
+            # the first adjacent vertex added to the current vertex is indexed
+            # as one more than the last adjacent vertex added to the previous
+            # vertex. Otherwise, the last vertex on this line will be adjacent
+            # to the first vertex on this line.
             self.numNodes += 1
 
         # add last line's adjacency list (which are just empty dicts)
         last = self.lines[-1].split()
         self.graph.extend([{} for i in xrange(len(last))])
+
+        # uncomment below to see the adjacency lists
+        #for i, g in enumerate(self.graph):
+        #    print i, "->", g
 
     def path(self, s, v):
         """
