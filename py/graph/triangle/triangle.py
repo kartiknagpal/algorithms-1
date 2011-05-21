@@ -135,7 +135,9 @@ def main():
         return
 
     # last element of split is "" if file is properly formatted
-    lines = lines.split("\n")[:-1]
+    lines = lines.split("\n")
+    if lines[-1] == "":
+        lines = lines[:-1]
     G = TriangleGraph(lines)
     G.dijkstra(0)
     print G.longest_path()
