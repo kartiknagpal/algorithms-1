@@ -134,7 +134,8 @@ def main():
         print "Can't open file '%s'" % sys.argv[1]
         return
 
-    # last element of split is "" if file is properly formatted
+    # had a bug here. my test files (all but triangle.txt) have an empty
+    # string on the end after splitting.
     lines = lines.split("\n")
     if lines[-1] == "":
         lines = lines[:-1]
