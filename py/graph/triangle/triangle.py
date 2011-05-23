@@ -150,16 +150,13 @@ def main():
         return
 
     try:
-        lines = open(sys.argv[1]).read()
+        lines = open(sys.argv[1]).readlines()
     except IOError:
         print "Can't open file '%s'" % sys.argv[1]
         return
 
-    # had a bug here. my test files (all but triangle.txt) have an empty
-    # string on the end after splitting.
-    lines = lines.split("\n")
-    if lines[-1] == "":
-        lines = lines[:-1]
+    lines = [line.strip() for line in lines]
+
     G = TriangleGraph(lines)
     G.dijkstra(0)
     print G.longest_path()
