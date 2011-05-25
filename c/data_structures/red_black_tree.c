@@ -58,6 +58,68 @@ static void rb_right_rotate(struct rb_node_s **T, struct rb_node_s *x) {
     x->p = y;
 }
 
+static void rb_delete_fixup(struct rb_node_s **T, struct rb_node_s *x) {
+    struct rb_node_s *w;
+
+    while (x != *T && x->color == BLACK) {
+        if (x == x->p->left) {
+            w = x->p->right;
+            if (w->color == RED) {
+                w->color = BLACK;
+                x->p->color = RED;
+                rb_left_rotate(T, x->p);
+                w = x->p->right;
+            }
+
+            if (w->left->color == BLACK && w->right->color == BLACK) {
+                w->color = RED;
+                x = x->p;
+            } else {
+                if (w->right->color == BLACK) {
+                    w->left->color = BLACK;
+                    w->color = RED;
+                    rb_right_rotate(T, w);
+                    w = x->p->right;
+                }
+
+                w->color = x->p->color;
+                x->p->color = BLACK;
+                w->right->color = BLACK;
+                rb_left_rotate(T, x->p);
+                x = *T;
+            }
+        } else {
+            w = x->p->left;
+            if (w->color == RED) {
+                w->color = BLACK;
+                x->p->color = RED;
+                rb_right_rotate(T, x->p);
+                w = x->p->left;
+            }
+
+            if (w->left->color == BLACK && w->right->color == BLACK) {
+                w->color = RED;
+                x = x->p;
+            } else {
+                if (w->left->color == BLACK) {
+                    w->right->color = BLACK;
+                    w->color = RED;
+                    rb_left_rotate(T, w);
+                    w = x->p->left;
+                }
+
+                w->color = x->p->color;
+                x->p->color = BLACK;
+                w->left->color = BLACK;
+                rb_right_rotate(T, x->p);
+                x = *T;
+            }
+        }
+    }
+
+    x->color = BLACK;
+}
+
 static void rb_insert_fixup(struct rb_node_s **T, struct rb_node_s *z) {
     struct rb_node_s *y;
 
@@ -178,8 +240,8 @@ static struct rb_node_s *rb_new_node(int key) {
     return n;
 }
 
-static rb_node_s *rb_min(struct rb_node_s *x) {
-    while (x->left)
+static struct rb_node_s *rb_min(struct rb_node_s *x) {
+    while (x->left != nil)
         x = x->left;
     return x;
 }
@@ -205,7 +267,7 @@ static struct rb_node_s *rb_successor(struct rb_node_s *x) {
     return t;
 }
 
-static rb_node_s *rb_delete(struct rb_node_s **T, struct rb_node_s *z) {
+static struct rb_node_s *rb_delete(struct rb_node_s **T, struct rb_node_s *z) {
     struct rb_node_s *x, *y;
 
     if (z->left == nil || z->right == nil)
@@ -222,7 +284,7 @@ static rb_node_s *rb_delete(struct rb_node_s **T, struct rb_node_s *z) {
 
     if (y->p == nil)
         *T = x;
-    else if (y == y->parent->left)
+    else if (y == y->p->left)
         y->p->left = x;
     else
         y->p->right = x;
@@ -259,7 +321,12 @@ int main(int argc, char **argv) {
 
     rb_preorder(root);
 
-    printf("\nroot = %d\n", root->key);
+    struct rb_node_s *d = root->left;
+    int k = root->left->key;
+    free(rb_delete(&root, root->left));
+
+    printf("\nAfter deleting %d:\n", k);
+    rb_preorder(root);
 
     rb_destroy(root);
     free(nil);
