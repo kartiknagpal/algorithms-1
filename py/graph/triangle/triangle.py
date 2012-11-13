@@ -8,16 +8,16 @@ class TriangleGraph(object):
 
     Example triangle (samples/triangle2.txt):
 
-                5*
+               (5)
                / \
               /   \
-             9*    6
+            (9)    6
             / \   / \
            /   \ /   \
-          4     6*    8
+          4    (6)    8
          / \   / \   / \
         /   \ /   \ /   \
-       0     7*    1     5
+       0    (7)    1     5
 
     Answer to the triangle above is 5+9+6+7 = 27
     """
