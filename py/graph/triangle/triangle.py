@@ -71,24 +71,18 @@ class TriangleGraph(object):
         else:
             return self.path(s, self.predecessors[v]) + self.values[v]
 
-    def relax(self, u, v, w):
-        """
-        Note: shortest-path relax function checks if d[v] > d[u] + w
-        Since I'm trying to find the longest path, I do the opposite.
-        """
-        if self.distances[v] < self.distances[u] + w:
-            self.distances[v] = self.distances[u] + w
-            self.predecessors[v] = u
-
-    def weight(self, u, v):
-        return self.values[u] + self.values[v]
-
     def dijkstra(self, s):
         """
         Dijkstra's algorithm finds the single-source shortest-path in a
         weighted directed graph. I want to find the single-source
         longest-path, so rather than initialize distances to infinity,
         they're initialized to -1.
+
+        I honestly don't think this can be called dijkstra anymore since it
+        doesn't require the usual pieces from Dijkstra's algorithm. The graph
+        is basically a pipeline/topology getting processed in order from top to
+        bottom. You don't need the usual graph traversal stuff like a queue and
+        vertex state maintenance.
         """
         for i in xrange(self.numNodes):
             self.distances.append(-1)
@@ -97,8 +91,10 @@ class TriangleGraph(object):
 
         for u in xrange(self.numNodes):
             for v in self.graph[u]:
-                w = self.weight(u, v)
-                self.relax(u, v, w)
+                w = self.values[u] + self.values[v]
+                if self.distances[v] < self.distances[u] + w:
+                    self.distances[v] = self.distances[u] + w
+                    self.predecessors[v] = u
 
     def longest_path(self):
         total = 0
